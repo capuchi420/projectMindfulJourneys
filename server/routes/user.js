@@ -3,8 +3,8 @@ import { getUser, likeOrDislikePost, login, signup } from '../controllers/user.j
 
 export const userRouter = express.Router();
 
-userRouter.get('/', getUser);
+userRouter.get('/:id', getUser);
 
 userRouter.post('/login', login);
 userRouter.post('/signup', signup);
-userRouter.post('/likeOrDislikePost', likeOrDislikePost);
+userRouter.put('/likeOrDislikePost', likeOrDislikePost);

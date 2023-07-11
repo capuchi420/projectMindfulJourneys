@@ -1,8 +1,9 @@
+import { postModel } from '../models/post.js';
 import { userModel } from '../models/user.js';
 import bcrypt from 'bcrypt';
 
 export const getUser = async (req, res) => {
-    const { id } = req.body;
+    const { id } = req.param;
     try{
         const user = await userModel.findOne({ id });
         res.send(user);
@@ -61,13 +62,30 @@ export const signup = async (req, res) => {
 
 export const likeOrDislikePost = async (req, res) => {
     try{
+        var liked = false;
         const { post_id, user_id } = req.body;
         const user = await userModel.findById(user_id);
-
         if(!user) return res.json({ status: false, msg: "No user found" });
 
-        res.send({status: true, user});
+        const post = await postModel.findById(post_id);
+        if(!post) return res.json({ status: false, msg: "No post found" });
+
+        if(user.likedPosts.find(post => post == post_id)){
+            post.likes--;
+            user.likedPosts.splice(user.likedPosts.indexOf(post_id), 1);
+            if(user.likedPosts.length == 1 && user.likedPosts[0] == post_id){
+                user.likedPosts = [];
+            }
+        }else{
+            liked = true;
+            post.likes++;
+            user.likedPosts.push(post._id);
+        }
+
+        await userModel.replaceOne({_id: user._id}, user);
+        await postModel.replaceOne({_id: post._id}, post);
+        res.send({status: true, liked, post});
     }catch(err){
-        res.json({ status: false, err });
+        res.send({status: false, err});
     }
 };

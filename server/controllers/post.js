@@ -20,7 +20,7 @@ export const createPost = async (req, res) => {
             user_id,
             txt,
             comments: [{
-                userId: 123,
+                userId: '648704825c201b250288cfff',
                 comment: "aaaaaaaaaaa"
             }],
             likes: 69
