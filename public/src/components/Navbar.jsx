@@ -2,6 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 export default function Navbar() {
+    const handleLogout = () => {
+        document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+        window.location.href = "/login";
+    }
+
   return (
     <Container>
         <div className='flex'>
@@ -9,7 +14,7 @@ export default function Navbar() {
                 <h1>MINDFUL JOURNEYS</h1>
             </div>
             <div className='logout'>
-                <i className="fa-solid fa-right-from-bracket"></i>
+                <i className="fa-solid fa-right-from-bracket" onClick={handleLogout}></i>
             </div>
         </div>
     </Container>

@@ -8,6 +8,8 @@ export default function Post({ post }) {
     const [username, setUsername] = useState("");
     const [isLiked, setIsLiked] = useState(false);
     const [likes, setLikes] = useState(post.likes);
+    const [comment, setComment] = useState("");
+    const [comments, setComments] = useState(post.comments);
 
     useEffect(() => {
       fetch(`http://localhost:6543/user/${_id}`).then(response => response.json()).then(data => {
@@ -20,12 +22,8 @@ export default function Post({ post }) {
     
 
     useEffect(() => {
-      fetch(`http://localhost:6543/user/whoPostIt/${post.user_id}`).then(res => res.json()).then(aaa => setUsername(aaa.username));
+      fetch(`http://localhost:6543/user/${post.user_id}`).then(res => res.json()).then(aaa => setUsername(aaa.username));
     }, []);
-
-    
-
-    const comments = post.comments;
 
     const handleLike = async () => {
         const sendData = {
@@ -42,6 +40,29 @@ export default function Post({ post }) {
         });
     };
 
+    const handleComment = async (e) => {
+      e.preventDefault();
+      const commentData = {
+        user_id: _id,
+        post_id: post._id,
+        txt: comment
+      };
+
+      fetch(`http://localhost:6543/post/leaveAComment`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(commentData)
+      }).then(res => res.json()).then(data => {
+        setComments(data.post.comments);
+      });
+
+      setComment("");
+    }
+
+    const handleChange = (e) => {
+      setComment(e.target.value);
+    }
+
   return (
     <Conatiner>
       <div className='info'>
@@ -57,15 +78,15 @@ export default function Post({ post }) {
         <p>{post.txt}</p>
       </div>
       <div className='leaveAComment'>
-        <form>
-          <input type="text" />
+        <form onSubmit={handleComment} >
+          <input type="text" value={comment} onChange={handleChange} />
           <button><i className="fa-regular fa-paper-plane"></i></button>
         </form>
       </div>
       <div className='comments'>
         {comments.map(comment => {
             return <Comment {...comment} />
-        })}
+        }).reverse()}
       </div>
     </Conatiner>
   )
@@ -136,12 +157,12 @@ const Conatiner = styled.div`
       margin-bottom: 1rem;
 
       p{
-        font-size: 1.2rem;
+        font-size: .9rem;
       }
 
       span{
         margin-top: .3rem;
-        font-size: .8rem;
+        font-size: .7rem;
       }
     }
   }

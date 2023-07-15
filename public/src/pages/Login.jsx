@@ -22,7 +22,6 @@ export default function login() {
   };
 
   const handleSubmit = async (e) => {
-    console.log('aaa')
     e.preventDefault();
     fetch('http://localhost:6543/user/login', {
       method: "POST",
