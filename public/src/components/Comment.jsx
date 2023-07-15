@@ -5,6 +5,7 @@ export default function Comment(props) {
 
     useEffect(() => {
         fetch(`http://localhost:6543/user/${props.userId}`).then(res => res.json()).then(data => setUsername(data.username));
+        // eslint-disable-next-line
     }, []);
 
   return (
