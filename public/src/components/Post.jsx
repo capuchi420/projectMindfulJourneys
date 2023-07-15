@@ -13,16 +13,18 @@ export default function Post({ post }) {
 
     useEffect(() => {
       fetch(`http://localhost:6543/user/${_id}`).then(response => response.json()).then(data => {
-            if(data.likedPosts.find(el => el == post._id)){
+            if(data.likedPosts.find(el => el === post._id)){
                 setIsLiked(true);
             }
-        });        
+        });
+        // eslint-disable-next-line
     }, []);
 
     
 
     useEffect(() => {
       fetch(`http://localhost:6543/user/${post.user_id}`).then(res => res.json()).then(aaa => setUsername(aaa.username));
+      // eslint-disable-next-line
     }, []);
 
     const handleLike = async () => {

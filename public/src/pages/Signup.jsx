@@ -7,6 +7,7 @@ export default function signup() {
   // eslint-disable-next-line
   useEffect(() => {
     if(cookies !== "") window.location.href = '/';
+    // eslint-disable-next-line
   }, []);
 
   // eslint-disable-next-line

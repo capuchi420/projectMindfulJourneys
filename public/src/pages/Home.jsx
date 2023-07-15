@@ -11,6 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     if(cookies === "") window.location.href = '/login';
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
