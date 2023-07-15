@@ -226,6 +226,8 @@ const Container = styled.div`
         border-radius: 1.6rem;
 
         h1{
+          width: 90%;
+          text-align: center;
           color: #fff;
           z-index: 999; 
         }

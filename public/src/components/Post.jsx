@@ -4,26 +4,32 @@ import Comment from './Comment';
 
 export default function Post({ post }) {
     let cookie = document.cookie;
-    const id = cookie.slice(cookie.indexOf('=')+1, cookie.length);
+    const _id = cookie.slice(cookie.indexOf('=')+1, cookie.length);
     const [username, setUsername] = useState("");
     const [isLiked, setIsLiked] = useState(false);
     const [likes, setLikes] = useState(post.likes);
 
     useEffect(() => {
-        fetch(`http://localhost:6543/user/${post.user_id}`).then(response => response.json()).then(data => setUsername(data.username));
-        fetch(`http://localhost:6543/user/${id}`).then(response => response.json()).then(data => {
+      fetch(`http://localhost:6543/user/${_id}`).then(response => response.json()).then(data => {
             if(data.likedPosts.find(el => el == post._id)){
-                console.log('aaaa');
                 setIsLiked(true);
             }
-        });
+        });        
     }, []);
+
+    
+
+    useEffect(() => {
+      fetch(`http://localhost:6543/user/whoPostIt/${post.user_id}`).then(res => res.json()).then(aaa => setUsername(aaa.username));
+    }, []);
+
+    
 
     const comments = post.comments;
 
     const handleLike = async () => {
         const sendData = {
-            user_id: id,
+            user_id: _id,
             post_id: post._id
         };
         fetch(`http://localhost:6543/user/likeOrDislikePost`, {
@@ -42,7 +48,7 @@ export default function Post({ post }) {
         <div className='user'>{username}</div>
         <div className='likes'>
           <div className='num'><p>{likes}</p></div>
-          <div onClick={handleLike}>
+          <div onClick={handleLike} className='like'>
             {isLiked ? <i className="fa-solid fa-heart"></i> : <i className="fa-regular fa-heart"></i>}
           </div>
         </div>
@@ -83,6 +89,12 @@ const Conatiner = styled.div`
 
       div.num{
         margin-right: .5rem;
+      }
+
+      div.like{
+        i{
+          cursor: pointer;
+        }
       }
     }
   }

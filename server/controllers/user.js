@@ -3,9 +3,19 @@ import { userModel } from '../models/user.js';
 import bcrypt from 'bcrypt';
 
 export const getUser = async (req, res) => {
+    const id = req.params.id;
+    try{
+        const user = await userModel.findById(id);
+        res.send(user);
+    }catch(err){
+        res.send(err);
+    }
+}
+
+export const whoPostIt = async (req, res) => {
     const { id } = req.param;
     try{
-        const user = await userModel.findOne({ id });
+        const user = await userModel.findOne({id});
         res.send(user);
     }catch(err){
         res.send(err);
@@ -84,7 +94,7 @@ export const likeOrDislikePost = async (req, res) => {
 
         await userModel.replaceOne({_id: user._id}, user);
         await postModel.replaceOne({_id: post._id}, post);
-        res.send({status: true, liked, post});
+        res.send({status: true, liked, post, user});
     }catch(err){
         res.send({status: false, err});
     }

@@ -5,7 +5,7 @@ export default function Comment(props) {
     const [username, setUsername] = useState("");
 
     useEffect(() => {
-        fetch(`http://localhost:6543/user/${props.userId}`).then(response => response.json()).then(data => setUsername(data.username));
+        fetch(`http://localhost:6543/user/whoPostIt/${props.userId}`).then(response => response.json()).then(data => setUsername(data.username));
     }, []);
 
   return (
